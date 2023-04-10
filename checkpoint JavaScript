@@ -1,0 +1,70 @@
+// 1-Define a Book class with properties for title, author, and year.
+// 2-Parse the JSON data into a JavaScript array of book objects using destructuring.
+// 3-Use a static method on the Book class with json parameter to parse the JSON data and 
+// 4-Use a getter method on the Book class to retrieve the author name.
+// 5-Use the sort() method with a custom comparison function to sort the array of Book objects by author name.
+// 6-Convert the sorted list of books into JSON format.
+// 7-Output the sorted list of books in JSON format.
+
+// 8- create promise which will take a book object and will check the year is bigger then 1950
+
+ const data= [ {    "title": "The Great Gatsby",    "author": "F. Scott Fitzgerald",    "year": 1925  },
+  {    "title": "To Kill a Mockingbird",    "author": "Harper Lee",    "year": 1960  },
+   {    "title": "The Catcher in the Rye",    "author": "J.D. Salinger",    "year": 1951  },
+     {    "title": "The Hobbit",    "author": "J.R.R. Tolkien",    "year": 1937  }]
+     
+     
+
+class Book {
+  constructor(title,author,year){
+    
+    this.title=title;
+    this.author=author;
+    this.year=year;
+  }
+  
+  static parseJson(obj){  
+    let currentData= JSON.parse(obj)
+    console.log(currentData);
+     return new Book (currentData.title,currentData.author,currentData.year);
+    
+  }
+  
+  get authorName(){
+    return this.author
+      
+  }
+}
+
+const books = data.map(({title,author,year})=>{
+  return new Book (title,author,year)
+})
+
+const authorBooks= books.sort((a, b) => a.authorName.localeCompare(b.authorName))
+
+const JsonAuthorBooks = JSON.stringify(authorBooks)
+
+console.log(JsonAuthorBooks);
+
+// console.log(books[1]);
+
+Book.parseJson(JSON.stringify( {    "title": "The Hobbit",    "author": "J.R.R. Tolkien",    "year": 1937  }))
+
+
+const checkPublicationYear = (book) => {
+  return new Promise((resolve, reject) => {
+    if (book.year > 1950) {
+      resolve(`${book.title} was published after 1950.`);
+    } else {
+      reject(`${book.title} was published before 1950.`);
+    }
+  });
+};
+
+checkPublicationYear(books[1])
+.then((message) => {
+  console.log(message);
+})
+.catch((error)=>{
+  console.error(error)
+})
